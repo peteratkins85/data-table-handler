@@ -1,2 +1,4 @@
 # data-table-handler
-Manages the back end operations for data tables 
+Handler for data tables back end operations
+
+
