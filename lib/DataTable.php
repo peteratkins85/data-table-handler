@@ -123,18 +123,12 @@ class DataTable
      */
     public function setColumns(array $columns)
     {
+        foreach ($columns as $column) {
+            $this->addColumn($column);
 
-        $i = 0;
-
-        while (isset($columns[$i])) {
-
-            $this->addColumn($columns[$i]);
-
-            if (isset($columns[$i]['data']) && !empty($columns[$i]['data'])) {
-                $this->addField($columns[$i]['data']);
+            if (isset($column['data']) && !empty($column['data'])) {
+                $this->addField($column['data']);
             }
-
-            $i++;
         }
     }
 
