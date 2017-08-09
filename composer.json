@@ -1,0 +1,19 @@
+{
+    "name": "shinrcoder/data-table-handler",
+    "description": "Handler for DataTable backen operations",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Peter Atkins",
+            "email": "peter.atkins85@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "ShinraCoder\\DataTableHandler\\": "lib/"
+        }
+    },
+    "require": {
+        "symfony/http-foundation": "^3.3"
+    }
+}

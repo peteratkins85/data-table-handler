@@ -1,7 +1,6 @@
 <?php
 
-namespace Oni\CoreBundle\Common;
-
+namespace ShinraCoder\DataTableHandler;
 
 interface DataTableQueryManagerInterface
 {

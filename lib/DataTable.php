@@ -1,6 +1,9 @@
 <?php
 
-namespace Oni\CoreBundle\Common;
+namespace ShinraCoder\DataTableHandler;
+
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class DataTable
@@ -9,7 +12,6 @@ namespace Oni\CoreBundle\Common;
  */
 class DataTable
 {
-
     /**
      * @var string
      */
@@ -47,7 +49,7 @@ class DataTable
         'data'            => [],
         'recordsTotal'    => 0,
         'recordsFiltered' => 0,
-        'draw'            => 1
+        'draw'            => 1,
     ];
 
     /**
@@ -77,15 +79,15 @@ class DataTable
 
     protected $dataTableQueryManager;
 
-
     /**
      * DataTable constructor.
-     * @param $request
+     * @param                                $request
      * @param DataTableQueryManagerInterface $dataTableQueryManager
      */
-    public function __construct($request, DataTableQueryManagerInterface $dataTableQueryManager)
+    public function __construct(DataTableQueryManagerInterface $dataTableQueryManager, Request $request = null)
     {
-        $this->init($request);
+        $request = $request ?: Request::createFromGlobals();
+        $this->init($request->query);
         $this->dataTableQueryManager = $dataTableQueryManager;
         $this->setResults($this->dataTableQueryManager->queryData($this));
     }
@@ -95,59 +97,60 @@ class DataTable
      *
      * @param $request
      */
-    public function init($request)
+    public function init(ParameterBag $request)
     {
-        if (!empty($request['search']['value'])) {
-           $this->setSearch(trim($request['search']['value']));
+        if (!empty($request->all()['search']['value'])) {
+            $this->setSearch(trim($request['search']['value']));
         }
 
-        if (isset($request['draw'])) {
+        if (isset($request->all()['draw'])) {
             $this->setDraw((int) $request['draw']);
         }
 
-        if (isset($request['columns'])) {
+        if (isset($request->all()['columns'])) {
             $this->setColumns($request['columns']);
         }
 
-        $this->setRequest($request)
-            ->setOrderBy(isset($request['order'][0]['column']) ? (int)$request['order'][0]['column'] : 0)
-            ->setOrder(isset($request['order'][0]['dir']) ? $request['order'][0]['dir'] : 'desc')
-            ->setStart(isset($request['start']) ? (int)$request['start'] : 0)
-            ->setLength(isset($request['length']) ? (int)$request['length'] : 10);
+        $this->setRequest($request->all())
+            ->setOrderBy(isset($request->all()['order'][0]['column']) ? (int) $request->all()['order'][0]['column'] : 0)
+            ->setOrder(isset($request->all()['order'][0]['dir']) ? $request->all()['order'][0]['dir'] : 'desc')
+            ->setStart(isset($request->all()['start']) ? (int) $request->all()['start'] : 0)
+            ->setLength(isset($request->all()['length']) ? (int) $request->all()['length'] : 10);
     }
 
     /**
      * @param array $columns
      */
-    public function setColumns(array $columns){
+    public function setColumns(array $columns)
+    {
 
         $i = 0;
 
-        while(isset($columns[$i])){
+        while (isset($columns[$i])) {
 
             $this->addColumn($columns[$i]);
 
-            if (isset($columns[$i]['data']) && !empty($columns[$i]['data'])){
+            if (isset($columns[$i]['data']) && !empty($columns[$i]['data'])) {
                 $this->addField($columns[$i]['data']);
             }
 
             $i++;
-
         }
-
     }
 
     /**
      * @param array $column
      * @return $this
      */
-    public function addColumn(array $column){
+    public function addColumn(array $column)
+    {
         $this->columns[] = $column;
 
         return $this;
     }
 
-    public function addField(string $field){
+    public function addField(string $field)
+    {
         $this->fields[] = $field;
 
         return $this;
@@ -207,11 +210,11 @@ class DataTable
      */
     public function setResults($results)
     {
-        $this->results =  [
+        $this->results = [
             'data'            => $results,
             'recordsTotal'    => $this->getRecordsTotal(),
             'recordsFiltered' => $this->getRecordsFiltered(),
-            'draw'            => $this->getDraw()
+            'draw'            => $this->getDraw(),
         ];
 
         return $this;
@@ -231,7 +234,7 @@ class DataTable
      */
     public function setRecordsTotal($recordsTotal)
     {
-        $this->recordsTotal = (int)$recordsTotal;
+        $this->recordsTotal = (int) $recordsTotal;
 
         return $this;
     }
@@ -250,7 +253,7 @@ class DataTable
      */
     public function setRecordsFiltered($recordsFiltered)
     {
-        $this->recordsFiltered = (int)$recordsFiltered;
+        $this->recordsFiltered = (int) $recordsFiltered;
 
         return $this;
     }
@@ -319,6 +322,7 @@ class DataTable
     public function setSearch($search)
     {
         $this->search = $search;
+
         return $this;
     }
 
@@ -329,6 +333,7 @@ class DataTable
     public function setLength($length)
     {
         $this->length = $length;
+
         return $this;
     }
 
@@ -339,6 +344,7 @@ class DataTable
     public function setStart($start)
     {
         $this->start = $start;
+
         return $this;
     }
 
@@ -349,10 +355,7 @@ class DataTable
     public function setDraw($draw)
     {
         $this->draw = $draw;
+
         return $this;
     }
-
-
-
-
 }

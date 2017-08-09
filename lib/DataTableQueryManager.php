@@ -6,8 +6,7 @@
  * Time: 16:24
  */
 
-namespace Oni\CoreBundle\Common;
-
+namespace ShinraCoder\DataTableHandler;
 
 abstract class DataTableQueryManager implements DataTableQueryManagerInterface
 {
