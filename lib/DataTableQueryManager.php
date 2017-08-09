@@ -8,6 +8,11 @@
 
 namespace ShinraCoder\DataTableHandler;
 
+/**
+ * Class DataTableQueryManager
+ * @package ShinraCoder\DataTableHandler
+ * @author Peter Atkins <peter.atkins85@gmail.com>
+ */
 abstract class DataTableQueryManager implements DataTableQueryManagerInterface
 {
     /**

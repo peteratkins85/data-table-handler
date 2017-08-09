@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class DataTable
- * @package Oni\CoreBundle\Common
+ * @package ShinraCoder\DataTableHandler
  * @author peter.atkins85@gmail.com
  */
 class DataTable
