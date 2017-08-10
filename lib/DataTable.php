@@ -2,9 +2,6 @@
 
 namespace ShinraCoder\DataTableHandler;
 
-use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\HttpFoundation\Request;
-
 /**
  * Class DataTable
  * @package ShinraCoder\DataTableHandler
@@ -18,12 +15,7 @@ class DataTable
     protected $search;
 
     /**
-     * @var
-     */
-    protected $orderBy;
-
-    /**
-     * @var string
+     * @var array
      */
     protected $order;
 
@@ -84,10 +76,9 @@ class DataTable
      * @param                                $request
      * @param DataTableQueryManagerInterface $dataTableQueryManager
      */
-    public function __construct(DataTableQueryManagerInterface $dataTableQueryManager, Request $request = null)
+    public function __construct(array $request, DataTableQueryManagerInterface $dataTableQueryManager)
     {
-        $request = $request ?: Request::createFromGlobals();
-        $this->init($request->query);
+        $this->init($request);
         $this->dataTableQueryManager = $dataTableQueryManager;
         $this->setResults($this->dataTableQueryManager->queryData($this));
     }
@@ -97,25 +88,40 @@ class DataTable
      *
      * @param $request
      */
-    public function init(ParameterBag $request)
+    public function init($request)
     {
-        if (!empty($request->all()['search']['value'])) {
+        if (!empty($request['search']['value'])) {
             $this->setSearch(trim($request['search']['value']));
         }
 
-        if (isset($request->all()['draw'])) {
+        if (array_key_exists('draw', $request)) {
             $this->setDraw((int) $request['draw']);
         }
 
-        if (isset($request->all()['columns'])) {
+        if (array_key_exists('columns', $request) && is_array($request['columns'])) {
             $this->setColumns($request['columns']);
         }
 
-        $this->setRequest($request->all())
-            ->setOrderBy(isset($request->all()['order'][0]['column']) ? (int) $request->all()['order'][0]['column'] : 0)
-            ->setOrder(isset($request->all()['order'][0]['dir']) ? $request->all()['order'][0]['dir'] : 'desc')
-            ->setStart(isset($request->all()['start']) ? (int) $request->all()['start'] : 0)
-            ->setLength(isset($request->all()['length']) ? (int) $request->all()['length'] : 10);
+        if (array_key_exists('order', $request) && is_array($request['order'])) {
+            foreach ($request['order'] as $order) {
+                $this->addOrder($order);
+            }
+        }
+
+        $this->setRequest($request)
+            ->setStart(array_key_exists('start', $request) ? (int) $request['start'] : 0)
+            ->setLength(array_key_exists('length', $request) ? (int) $request['length'] : 10);
+    }
+
+    /**
+     * @param array $order
+     * @return $this
+     */
+    public function addOrder(array $order)
+    {
+        $this->order[] = $order;
+
+        return $this;
     }
 
     /**
@@ -143,7 +149,7 @@ class DataTable
         return $this;
     }
 
-    public function addField(string $field)
+    public function addField($field)
     {
         $this->fields[] = $field;
 
@@ -206,8 +212,8 @@ class DataTable
     {
         $this->results = [
             'data'            => $results,
-            'recordsTotal'    => $this->getRecordsTotal(),
-            'recordsFiltered' => $this->getRecordsFiltered(),
+            'recordsTotal'    => $this->dataTableQueryManager->getResultTotal(),
+            'recordsFiltered' => $this->dataTableQueryManager->getFilteredResultTotal(),
             'draw'            => $this->getDraw(),
         ];
 
