@@ -17,15 +17,15 @@ The first argument passed will be the whole post/get payload containing the data
 <?php
 
 namespace ShinraCoder\DataTableHandler;
-
+ 
 /**
  * Interface DataTableQueryManagerInterface
  * @package ShinraCoder\DataTableHandler
  */
 interface DataTableQueryManagerInterface
 {
-    /**
-     * Expected multidimensional associative array results e.g.
+    /** 
+     * Expects a multidimensional associative array of results e.g. 
      * [
      *      [
      *          'field1' => 'value1',
