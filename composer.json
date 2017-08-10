@@ -13,7 +13,8 @@
             "ShinraCoder\\DataTableHandler\\": "lib/"
         }
     },
-    "require": {
-        "symfony/http-foundation": "^3.3"
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^6.2"
     }
 }
