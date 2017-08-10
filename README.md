@@ -56,4 +56,4 @@ interface DataTableQueryManagerInterface
 
 The DataTable class will use the above interface to query and set the dataTable results using the **`queryData`** method making the query manager totally abstract.
 
-Regardless if querying data from an API, Database, ORM etc it's irrelevant to the dataTable class as long as your passing back an array or results from the **`queryData`** method this will be handled seamlessly. 
+Regardless if querying data from an API, Database, etc it's irrelevant to the dataTable class as long as your passing back an array or results from the **`queryData`** method this will be handled seamlessly. 
