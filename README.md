@@ -1,4 +1,4 @@
-# data-table-handler
+# Data Table Request Handler
 Manages the back end operations for data table version 1.10+
 
 **Basic Usage**
