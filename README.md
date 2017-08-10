@@ -25,12 +25,12 @@ namespace ShinraCoder\DataTableHandler;
 interface DataTableQueryManagerInterface
 {
     /**
-     * Expected multidimensional array row results e.g.
+     * Expected multidimensional associative array results e.g.
      * [
      *      [
-     *          'field1',
-     *          'field2',
-     *          'field3,
+     *          'field1' => 'value1',
+     *          'field2' => 'value2',
+     *          'field3  => 'value3',
      *      ]
      * ]
      * @param DataTable $dataTable
@@ -39,14 +39,14 @@ interface DataTableQueryManagerInterface
     public function queryData(DataTable $dataTable);
 
     /**
-     * The DataTable class will use this method to set
+     * The DataTable class will uses this method to set
      * its property "RecordsTotal"
      * @return mixed
      */
     public function getResultTotal();
 
     /**
-     * The DataTable class will use this method to set
+     * The DataTable class will uses this method to set
      * its property "RecordsFiltered"
      * @return mixed
      */
