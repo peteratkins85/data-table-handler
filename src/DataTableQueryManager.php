@@ -10,6 +10,11 @@ namespace ShinraCoder\DataTableHandler;
 abstract class DataTableQueryManager implements DataTableQueryManagerInterface
 {
     /**
+     * @var array
+     */
+    protected $fields = [];
+
+    /**
      * @var int
      */
     protected $resultTotal;
@@ -19,16 +24,26 @@ abstract class DataTableQueryManager implements DataTableQueryManagerInterface
      */
     protected $filteredResultTotal;
 
+    /**
+     * @return int
+     */
     public function getFilteredResultTotal()
     {
         return $this->filteredResultTotal;
     }
 
+    /**
+     * @return int
+     */
     public function getResultTotal()
     {
         return $this->resultTotal;
     }
 
+    /**
+     * @param $filteredResultTotal
+     * @return $this
+     */
     public function setFilteredResultTotal($filteredResultTotal)
     {
         $this->filteredResultTotal = $filteredResultTotal;
@@ -36,6 +51,10 @@ abstract class DataTableQueryManager implements DataTableQueryManagerInterface
         return $this;
     }
 
+    /**
+     * @param $resultTotal
+     * @return $this
+     */
     public function setResultTotal($resultTotal)
     {
         $this->resultTotal = $resultTotal;

@@ -129,11 +129,11 @@ class DataTable
      */
     public function setColumns(array $columns)
     {
-        foreach ($columns as $column) {
+        foreach ($columns as $key => $column) {
             $this->addColumn($column);
 
             if (isset($column['data']) && !empty($column['data'])) {
-                $this->addField($column['data']);
+                $this->fields[$key] = $column;
             }
         }
     }
@@ -147,6 +147,14 @@ class DataTable
         $this->columns[] = $column;
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getColumns()
+    {
+        return $this->columns;
     }
 
     public function addField($field)
