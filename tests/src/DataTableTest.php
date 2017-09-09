@@ -10,6 +10,11 @@ class DataTableTest extends TestCase
      */
     private $dataTableRequest;
 
+    /**
+     * @var DataTable
+     */
+    private $dataTable;
+
     public function setUp()
     {
 
@@ -24,9 +29,9 @@ class DataTableTest extends TestCase
                 [
                     0 =>
                         [
-                            'data'       => 'firstName',
+                            'data'       => '',
                             'name'       => '',
-                            'searchable' => 'true',
+                            'searchable' => 'false',
                             'orderable'  => 'true',
                             'search'     =>
                                 [
@@ -36,7 +41,7 @@ class DataTableTest extends TestCase
                         ],
                     1 =>
                         [
-                            'data'       => 'lastName',
+                            'data'       => 'firstName',
                             'name'       => '',
                             'searchable' => 'true',
                             'orderable'  => 'true',
@@ -48,7 +53,7 @@ class DataTableTest extends TestCase
                         ],
                     2 =>
                         [
-                            'data'       => 'email',
+                            'data'       => 'lastName',
                             'name'       => '',
                             'searchable' => 'true',
                             'orderable'  => 'true',
@@ -60,7 +65,7 @@ class DataTableTest extends TestCase
                         ],
                     3 =>
                         [
-                            'data'       => 'phoneNumber',
+                            'data'       => 'email',
                             'name'       => '',
                             'searchable' => 'true',
                             'orderable'  => 'true',
@@ -71,6 +76,18 @@ class DataTableTest extends TestCase
                                 ],
                         ],
                     4 =>
+                        [
+                            'data'       => 'phoneNumber',
+                            'name'       => '',
+                            'searchable' => 'true',
+                            'orderable'  => 'true',
+                            'search'     =>
+                                [
+                                    'value' => '',
+                                    'regex' => 'false',
+                                ],
+                        ],
+                    5 =>
                         [
                             'data'       => 'mobileNumber',
                             'name'       => '',
@@ -91,22 +108,50 @@ class DataTableTest extends TestCase
                             'dir'    => 'asc',
                         ],
                 ],
-            'start'   => '0',
-            'length'  => '2',
+            'start'   => '10',
+            'length'  => '15',
             'search'  =>
                 [
-                    'value' => '',
+                    'value' => 'testFirstName',
                     'regex' => 'false',
                 ],
         ];
 
-        $dataTable = new DataTable($dataTableRequest, $dataTableQueryManager);
+        $this->dataTable = new DataTable($this->dataTableRequest, $dataTableQueryManager);
+    }
+
+    public function testGetDraw()
+    {
+        $this->assertEquals('3', $this->dataTable->getDraw());
+    }
+
+    public function testGetStart()
+    {
+        $this->assertEquals('10', $this->dataTable->getStart());
+    }
+
+    public function testGetLength()
+    {
+        $this->assertEquals('15', $this->dataTable->getLength());
+    }
+
+    public function testGetSearch()
+    {
+        $this->assertEquals('testFirstName', $this->dataTable->getSearch());
     }
 
     public function testGetColumns()
     {
-        assert()
+        $this->assertArraySubset($this->dataTableRequest['columns'], $this->dataTable->getColumns());
     }
 
+    public function testGetFields()
+    {
+        $this->assertEquals('firstName', $this->dataTable->getFields()[1]['data']);
+        $this->assertEquals('lastName', $this->dataTable->getFields()[2]['data']);
+        $this->assertEquals('email', $this->dataTable->getFields()[3]['data']);
+        $this->assertEquals('phoneNumber', $this->dataTable->getFields()[4]['data']);
+        $this->assertEquals('mobileNumber', $this->dataTable->getFields()[5]['data']);
+    }
 }
 
